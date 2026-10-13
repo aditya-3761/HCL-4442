@@ -1,0 +1,6 @@
+out/
+*.class
+library-report.csv
+.idea/
+*.iml
+.DS_Store
