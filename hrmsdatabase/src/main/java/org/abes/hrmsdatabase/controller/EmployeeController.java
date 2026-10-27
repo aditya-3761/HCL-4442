@@ -1,5 +1,5 @@
 package org.abes.hrmsdatabase.controller;
-import org.springframework.web.bind.annotation.PathVariable;
+
 import org.abes.hrmsdatabase.model.Employee;
 import org.abes.hrmsdatabase.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,35 +7,34 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin("http://localhost:5173/")
+@RequestMapping("/v1/user")
 public class EmployeeController {
-
     @Autowired
-    private EmployeeService employeeService;
+    EmployeeService employeeService;
 
     @GetMapping("/")
-    public String msg() {
-        return "Welcome to Spring Boot HRMS";
+    public String welcome(){
+        return "<h1> Welcome to HRMS Database </h1>";
+    }
+    @PostMapping("/addemp")
+    public String addNewEmployee(@RequestBody Employee employee){
+        System.out.println(employee.getEmail());
+        return employeeService.createNewEmployee(employee);
     }
 
-    @GetMapping("/addemp")
-    public String addEmployee(
-            @RequestParam long emp_id,
-            @RequestParam String emp_name,
-            @RequestParam String stack,
-            @RequestParam String designation) {
-        Employee emp = new Employee(
-                emp_id, emp_name, stack, designation
-        );
-        return employeeService.createNewEmployee(emp);
+    @GetMapping("/findById/{empid}")
+    public String getById(@PathVariable long empid){
+        return employeeService.getById(empid);
     }
-
-    @GetMapping("/getempbyid/{emp_id}")
-    public Employee getEmpById(@PathVariable long emp_id) {
-        return employeeService.getEmployeeById(emp_id);
+    @GetMapping("/deleteByid/{empid}")
+    public String deleteById(long id){
+        return employeeService.deleteById(id);
     }
+    @PutMapping("/updateEmployee/{empid}")
+    public String updateEmployee(
+            @PathVariable long empid,
+            @RequestBody Employee emp) {
 
-    @GetMapping("/deleteById/{id}")
-    public String deleteById(@RequestParam long empid, @PathVariable String id) {
-        return employeeService.deleteById(empid);
+        return employeeService.updateEmployee(empid, emp);
     }
 }
